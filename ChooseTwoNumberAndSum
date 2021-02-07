@@ -1,0 +1,25 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+vector<int> solution(vector<int> numbers) {
+    vector<int> answer;
+    
+    string strBitMask(2, 1);
+    strBitMask.resize(numbers.size(), 0);
+    
+    do{
+        int nSum = 0;
+        for(int index = 0; index < numbers.size(); index++)
+            if(strBitMask[index])
+                nSum += numbers[index];
+        answer.push_back(nSum);
+    }while(prev_permutation(strBitMask.begin(), strBitMask.end()));
+    
+    sort(answer.begin(), answer.end());
+    answer.erase(unique(answer.begin(), answer.end()), answer.end());
+    
+    return answer;
+}
