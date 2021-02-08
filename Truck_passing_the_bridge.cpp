@@ -21,6 +21,16 @@ int solution(int bridge_length, int weight, vector<int> truck_weights) {
         
         answer++;
         
+        for(vector<TruckInfo>::iterator iter = VecTruckInfo.begin(); iter != VecTruckInfo.end();){
+            iter->nLength++;
+            if(iter->nLength >= bridge_length){
+                nSum -= iter->nWeight;
+                iter = VecTruckInfo.erase(iter);
+            }
+            else
+                iter++;
+        }
+        
         if(truck_weights.size() != 0){
             if(nSum + truck_weights.front() <= weight){
                  nSum += truck_weights.front();
@@ -28,18 +38,8 @@ int solution(int bridge_length, int weight, vector<int> truck_weights) {
                  Temp.nWeight = truck_weights.front();
                  Temp.nLength = 0;
                  VecTruckInfo.push_back(Temp);
-                 truck_weights.pop_back();
+                truck_weights.erase(truck_weights.begin());
             }   
-        }
-        
-        for(vector<TruckInfo>::iterator iter = VecTruckInfo.begin(); iter != VecTruckInfo.end();){
-            iter->nLength++;
-            if(iter->nLength > bridge_length){
-                nSum -= iter->nWeight;
-                iter = VecTruckInfo.erase(iter);
-            }
-            else
-                iter++;
         }
     }
     
