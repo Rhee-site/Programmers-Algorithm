@@ -1,0 +1,19 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int n) {
+    int answer = 0;
+    
+    vector<int> VecnCandidate(n);
+    VecnCandidate[0] = 1;
+    VecnCandidate[1] = 2;
+    
+    for(int index = 2; index < n; index++){
+        int nTemp = VecnCandidate[index - 1] + VecnCandidate[index - 2];
+        VecnCandidate[index] = nTemp % 1000000007;
+    }
+    answer = VecnCandidate[n - 1];
+    return answer;
+}
