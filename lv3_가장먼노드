@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <queue>
+
+using namespace std;
+
+bool cmp(int a, int b){
+    return a > b;   
+}
+    
+int solution(int n, vector<vector<int>> edge) {
+    int answer = 0;
+    
+    vector<vector<int>> VecVecnInfo(n + 1);
+    vector<bool> VecbVisit(n + 1, false);
+    vector<int> VecnDistance(n + 1, 0);
+    queue<int> q;
+    
+    for(int index = 0; index < edge.size(); index++){
+        int nStart = edge[index][0];
+        int nEnd = edge[index][1];
+        VecVecnInfo[nStart].push_back(nEnd);
+        VecVecnInfo[nEnd].push_back(nStart);
+    }
+    
+    q.push(1);
+    VecbVisit[1] = true;
+    
+    while(!q.empty()){
+        int nStartNode = q.front();
+        q.pop();
+        
+        for(int index = 0; index < VecVecnInfo[nStartNode].size(); index++){
+            int nEndNode = VecVecnInfo[nStartNode][index];
+            if(!VecbVisit[nEndNode]){
+                VecbVisit[nEndNode] = true;
+                VecnDistance[nEndNode] = VecnDistance[nStartNode] + 1;
+                q.push(nEndNode);
+            }
+        }
+    }
+    
+    sort(VecnDistance.begin(), VecnDistance.end(), cmp);
+    
+    for(int index = 0; index < VecnDistance.size(); index++){
+        if(VecnDistance[index] == VecnDistance[0])
+            answer++;
+    }
+    
+    return answer;
+}
