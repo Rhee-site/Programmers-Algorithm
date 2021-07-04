@@ -1,0 +1,53 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+bool Check(string s){
+    int nCount = 0;
+    for(char c:s){
+        if(c == '(')
+            nCount++;
+        else
+            nCount--;
+        if(nCount < 0)
+            return false;
+    }
+    
+    return nCount==0;
+}
+
+string solution(string p) {
+    string answer = "";
+    
+    if(p == ""){
+        answer = p;
+    }
+    else{
+        int nCount = 0;
+        string u, v;
+        for(int index = 0; index < p.size(); index++){
+            if(p[index] == '(')
+                nCount++;
+            else
+                nCount--;
+            if(nCount == 0){
+                u = p.substr(0, index + 1);
+                v = p.substr(index + 1);
+                break;
+            }
+        }
+        
+        if(Check(u))
+            return u + solution(v);
+        
+        answer = "(" + solution(v) + ")";
+        
+        for(int index = 1; index < u.size() - 1; index++){
+            answer += (u[index] == '('?")":"(");
+        }
+    }
+        
+    
+    return answer;
+}
