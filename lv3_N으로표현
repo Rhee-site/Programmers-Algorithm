@@ -1,0 +1,31 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <set>
+#include <cmath>
+using namespace std;
+
+void dfs(int N, int number, int count, int currentNumber, int & answer){
+    if(count >= 9)
+        return;
+    if(currentNumber == number){
+        answer = min(answer, count);
+        return;
+    }
+    int tempNumber = 0;
+    for(int index = 0; index + count < 9; index++){
+        tempNumber = tempNumber * 10 + N;
+        dfs(N, number, count + 1 + index, currentNumber + tempNumber, answer);
+        dfs(N, number, count + 1 + index, currentNumber - tempNumber, answer);
+        dfs(N, number, count + 1 + index, currentNumber * tempNumber, answer);
+        dfs(N, number, count + 1 + index, currentNumber / tempNumber, answer);
+    }
+}
+
+int solution(int N, int number) {
+    int answer = 9;
+    dfs(N, number, 0, 0, answer);
+    if(answer == 9)
+        answer = -1;
+    return answer;
+}
