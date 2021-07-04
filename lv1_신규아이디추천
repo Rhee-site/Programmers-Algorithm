@@ -1,0 +1,101 @@
+#include <string>
+#include <vector>
+#include <iostream>
+using namespace std;
+
+string solution(string new_id) {
+    string answer = "";
+    
+    string strTemp1;
+    for(int index = 0; index < new_id.size(); index++){
+        if(new_id[index] > 64){
+            if(new_id[index] < 91){
+                strTemp1 += (new_id[index] + 32);
+            }
+            else{
+                strTemp1 += new_id[index];
+            }
+        }
+        else{
+            strTemp1 += new_id[index];
+        }
+    }
+    
+    string strTemp2;
+    for(int index = 0; index < strTemp1.size(); index++){
+        if(strTemp1[index] == '-'){
+            strTemp2 += strTemp1[index];
+        }
+        else if(strTemp1[index] == '_'){
+            strTemp2 += strTemp1[index];
+        }
+        else if(strTemp1[index] == '.'){
+            strTemp2 += strTemp1[index];
+        }
+        else{
+            if(strTemp1[index] > 47){
+                if(strTemp1[index] < 58){
+                    strTemp2 += strTemp1[index];
+                }
+                
+                if(strTemp1[index] > 96){
+                    if(strTemp1[index] < 123){
+                        strTemp2 += strTemp1[index];
+                    }
+                }
+            }
+        }
+    }
+        
+    string strTemp3;
+    for(int index = 0; index < strTemp2.size(); index++){
+        if(strTemp2[index] == '.'){
+            if(strTemp3.size() > 0){
+                if(strTemp3.back() == '.'){
+                    continue;
+                }   
+            }
+        }
+        strTemp3 += strTemp2[index];
+    }
+   
+    if(strTemp3.front() == '.'){
+        strTemp3 = strTemp3.substr(1, strTemp3.size());
+    }
+    
+    if(strTemp3.back() == '.'){
+        strTemp3 = strTemp3.substr(0, strTemp3.size() - 1);
+    }
+   
+    string strTemp4;
+    if(strTemp3.size() == 0){
+        strTemp4 = 'a';
+    }
+    else{
+        strTemp4 = strTemp3;
+    }
+    
+    string strTemp5;
+    string strTemp6;
+    if(strTemp4.size() > 15){
+        strTemp5 = strTemp4.substr(0, 15);
+        if(strTemp5.back() == '.'){
+            strTemp6 = strTemp5.substr(0, 14);
+            answer = strTemp6;
+        }
+        else{
+            answer = strTemp5;
+        }
+    }
+    else if(strTemp4.size() < 3){
+        while(strTemp4.size() != 3){
+            strTemp4 += strTemp4.back();
+        }
+        answer = strTemp4;
+    }
+    else{
+        answer = strTemp4;
+    }
+    
+    return answer;
+}
