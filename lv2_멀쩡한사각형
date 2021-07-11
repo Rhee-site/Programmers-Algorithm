@@ -1,0 +1,24 @@
+#include <iostream>
+
+using namespace std;
+
+long long gcd(int a, int b){
+    long Result;
+    while(b != 0){
+        Result = a % b;
+        a = b;
+        b = Result;
+    }
+    return a;
+}
+
+long long solution(int w,int h) {
+    long long answer = 1;
+    
+    long long lW = w;
+    long long lH = h;
+    long long Temp = (w + h) - gcd(w, h);
+    answer = (lW * lH) - Temp;
+    
+    return answer;
+}
