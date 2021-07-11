@@ -1,0 +1,17 @@
+#include <string>
+#include <vector>
+#include <map>
+using namespace std;
+
+string solution(vector<string> participant, vector<string> completion) {
+    map<string, int> mp;
+    
+    for(auto c : completion)
+        mp[c] += 1;
+    
+    for(auto p : participant){
+        mp[p] -= 1;
+        if(mp[p] < 0)
+            return p;
+    }
+}
