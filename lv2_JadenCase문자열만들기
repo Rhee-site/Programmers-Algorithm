@@ -1,0 +1,33 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string solution(string s) {
+    string answer = "";
+    
+    bool bMode = true;
+    for(int index = 0; index < s.size(); index++){
+        if(s[index] == 32){
+            bMode = true;
+            answer += s[index];
+        }
+        else{
+            if(bMode){
+                bMode = false;
+                if(s[index] > 96)
+                    answer += (s[index] - 32);
+                else
+                    answer += s[index];
+            }
+            else{
+                if(s[index] < 91 && s[index] > 64)
+                    answer += (s[index] + 32);
+                else
+                    answer += s[index];
+            }
+        }
+    }
+    
+    return answer;
+}

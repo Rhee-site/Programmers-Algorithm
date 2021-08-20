@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+bool cmp(const pair<float, int>& a, const pair<float, int>& b){
+    if(a.first != b.first)
+        return a.first > b.first;
+    else
+        return a.second < b.second;
+}
+
+vector<int> solution(int N, vector<int> stages) {
+    vector<int> answer;
+    
+    vector<int> VecnTotal(N+1);
+    for(int index = 0; index < stages.size(); index++)
+        for(int stage = 0; stage < stages[index]; stage++)
+            VecnTotal[stage]++;
+    
+    vector<int> VecnCurrent(N+1);
+    for(int index = 0; index < stages.size(); index++)
+        VecnCurrent[stages[index] - 1]++;
+        
+    vector<float> VecfTemp;
+    for(int index = 0; index < N; index++){
+        float fTemp;
+        if(VecnTotal[index] == 0){
+            VecfTemp.push_back(0.0f);
+        }
+        else{
+            fTemp = (float)VecnCurrent[index] / (float)VecnTotal[index];
+            VecfTemp.push_back(fTemp);   
+        }
+    }
+    
+    vector<pair<float, int>> VecVecnTemp;
+    for(int index = 0; index < VecfTemp.size(); index++){
+        pair<float, int> Temp;
+        Temp.first = VecfTemp[index];
+        Temp.second = index + 1;
+        VecVecnTemp.push_back(Temp);
+    }
+    
+    sort(VecVecnTemp.begin(), VecVecnTemp.end(), cmp);
+    
+    for(int index = 0; index < VecVecnTemp.size(); index++)
+        answer.push_back(VecVecnTemp[index].second);
+    
+    return answer;
+}
