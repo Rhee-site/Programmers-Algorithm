@@ -1,0 +1,23 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int n) {
+    int answer = 0;
+    int nSum = 0;
+    int nNumbers = 1;
+    while(true){
+        nSum = 0;
+        
+        for(int index = 1; index <= nNumbers; index++)
+            nSum += index;
+        
+        if(nSum > n)
+            break;
+        
+        if((n - nSum) % nNumbers++ == 0)
+            answer++;
+    }
+    return answer;
+}
