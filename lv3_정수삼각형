@@ -1,0 +1,29 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int solution(vector<vector<int>> triangle) {
+    int answer = 0;
+    
+    int nHeight = triangle.size();
+    vector<vector<int>> VecResult(nHeight, vector<int>(nHeight));
+    
+    VecResult[0][0] = triangle[0].front();
+    for(int col = 1; col < nHeight; col++){
+        for(int row = 0; row <= col; row++){
+            if(!row)
+                VecResult[col][row] = VecResult[col - 1][row] + triangle[col][row];
+            else if(row == col)
+                VecResult[col][row] = VecResult[col - 1][row - 1] + triangle[col][row];
+            else
+                VecResult[col][row] = max(VecResult[col - 1][row - 1] + triangle[col][row], VecResult[col - 1][row] + triangle[col][row]);
+            
+            if(col == nHeight - 1)
+                answer = max(VecResult[col][row], answer);
+        }
+    }
+    
+    return answer;
+}
