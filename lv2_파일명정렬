@@ -1,0 +1,65 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+
+using namespace std;
+
+bool cmp(pair<string, pair<string, int>> a, pair<string, pair<string, int>> b)
+{
+    if(a.first == b.first){
+        if(a.second.first == b.second.first)
+            return a.second.second < b.second.second;
+        else
+            return stoi(a.second.first) < stoi(b.second.first);
+    }
+    else
+        return a.first < b.first;
+}
+
+vector<string> solution(vector<string> files) {
+    vector<string> answer;
+    
+    string strHead = "", strNumber = "";
+    bool bCheckHead = false, bCheckNumber = false;
+    vector<pair<string, pair<string, int>>> v;
+    
+    for(int i = 0; i < files.size(); i++)
+    {
+        pair<string, int> p;
+        
+        for(int j = 0; j < files[i].size(); j++)
+        {
+            if(bCheckHead == false)
+            {
+                if(files[i][j] >= '0' && files[i][j] <= '9')
+                {
+                    bCheckHead = true;
+                    strNumber += files[i][j];
+                }    
+                else
+                    strHead += tolower(files[i][j]);
+            }
+            else if(bCheckHead && bCheckNumber == false)
+            {
+                if(files[i][j] >= '0' && files[i][j] <= '9')
+                    strNumber += files[i][j];
+                else
+                    break;
+            }       
+        }
+        p = make_pair(strNumber, i);
+        v.push_back(make_pair(strHead, p));
+        strHead.clear();
+        strNumber.clear();
+        bCheckHead = false;
+        bCheckNumber = false;
+    }
+    
+    stable_sort(v.begin(), v.end(), cmp);
+    
+    for(auto iter : v)
+        answer.push_back(files[iter.second.second]);
+    
+    return answer;
+}
