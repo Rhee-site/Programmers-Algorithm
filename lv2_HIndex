@@ -1,0 +1,22 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+int solution(vector<int> citations) {
+    int answer = 0;
+    
+    sort(citations.begin(), citations.end(), greater<int>());
+    if(!citations.front())
+        return 0;
+    
+    for(int index = 0; index < citations.size(); index++){
+        if(citations[index] > index)
+            answer++;
+        else
+            break;
+    }
+    
+    return answer;
+}
