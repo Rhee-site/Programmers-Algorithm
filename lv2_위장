@@ -1,0 +1,19 @@
+#include <string>
+#include <vector>
+#include <map>
+using namespace std;
+
+int solution(vector<vector<string>> clothes) {
+    int answer = 0;
+    
+    map<string, int> m;
+    for(auto cloth : clothes)
+        m[cloth[1]] += 1;
+    
+    answer++;
+    for(auto  iter = m.begin(); iter != m.end(); iter++)
+        answer *= iter->second + 1;
+    answer--;
+    
+    return answer;
+}
