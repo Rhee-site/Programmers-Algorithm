@@ -1,0 +1,16 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<vector<int>> solution(vector<vector<int>> arr1, vector<vector<int>> arr2) {
+    vector<vector<int>> answer;
+    
+    for(int FIndex = 0; FIndex < arr1.size(); FIndex++){
+        vector<int> VecTemp;
+        for(int SIndex = 0; SIndex < arr1.front().size(); SIndex++)
+            VecTemp.push_back(arr1[FIndex][SIndex] + arr2[FIndex][SIndex]);
+        answer.push_back(VecTemp);
+    }
+    return answer;
+}
