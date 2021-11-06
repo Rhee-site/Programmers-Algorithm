@@ -1,0 +1,13 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string solution(string phone_number) {
+    string answer = "";
+    int phone_number_count = phone_number.size();
+    answer = phone_number.substr(phone_number_count - 4, 4);
+    while(answer.size() != phone_number_count)
+        answer = "*" + answer;
+    return answer;
+}
