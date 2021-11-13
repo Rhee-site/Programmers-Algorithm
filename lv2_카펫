@@ -1,0 +1,24 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<int> solution(int brown, int yellow) {
+    vector<int> answer;
+    
+    int nTotalCount = brown + yellow;
+    int nRow = 3;
+    while(true){
+        if(nTotalCount % nRow == 0){
+            int nCol = nTotalCount / nRow;
+            if((nRow - 2) * (nCol - 2) == yellow){
+                answer.push_back(nCol);
+                answer.push_back(nRow);
+                break;
+            }
+        }
+        nRow++;
+    }
+    
+    return answer;
+}
