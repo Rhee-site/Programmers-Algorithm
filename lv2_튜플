@@ -1,0 +1,49 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <set>
+using namespace std;
+
+vector<int> solution(string s) {
+    vector<int> answer;
+   
+    vector<int> VecnTemp;
+    vector<pair<int, vector<int>>> VecPairTemp;
+    
+    const int nStringCount = s.size();
+    int nIndex = 0;
+    for(int index = 1; index < nStringCount - 1;  index++){
+        if(s[index] != '{'){
+            if(s[index] == '}'){
+                VecnTemp.push_back(nIndex);
+                VecPairTemp.push_back(make_pair(VecnTemp.size(), VecnTemp));
+                nIndex = 0;
+                VecnTemp.clear();
+            }
+            else if(s[index] == ','){
+                if(s[index - 1] != '}'){
+                    VecnTemp.push_back(nIndex);
+                    nIndex = 0;
+                }
+            }
+            else{
+                nIndex *= 10;
+                nIndex += (s[index] - '0');
+            }
+        }
+    }
+    
+    sort(VecPairTemp.begin(), VecPairTemp.end());
+    
+    set<int> SetnTemp;
+    for(pair<int, vector<int>> p : VecPairTemp){
+        for(int num : p.second){
+            if(SetnTemp.find(num) == SetnTemp.end()){
+                SetnTemp.insert(num);
+                answer.push_back(num);
+            }
+        }
+    }
+    
+    return answer;
+}
