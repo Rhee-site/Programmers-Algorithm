@@ -1,0 +1,35 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <set>
+#include <algorithm>
+using namespace std;
+
+bool Check(vector<int> vec,int now){
+    for(int i = 0; i < vec.size(); i++)
+        if((vec[i] & now) == vec[i])
+            return false;
+    return true;
+}
+
+int solution(vector<vector<string>> relation) {
+    int answer = 0;
+    vector<int> VecnAnswer;
+    int nRowCount = relation.size();
+    int nColCount = relation.front().size();
+    
+    for(int index = 0; index < (1 << nColCount); index++){
+        set<string> SetstrTemp;
+        for(int i = 0; i < nRowCount; i++){
+            string strTemp;
+            for(int j = 0; j < nColCount; j++)
+                if(index & (1 << j))
+                    strTemp += relation[i][j];
+            SetstrTemp.insert(strTemp);
+        }
+        if(SetstrTemp.size() == nRowCount && Check(VecnAnswer, index))
+            VecnAnswer.push_back(index);
+    }
+    answer = VecnAnswer.size();
+    return answer;
+}
