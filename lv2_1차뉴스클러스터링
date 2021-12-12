@@ -1,0 +1,49 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
+
+using namespace std;
+
+int solution(string str1, string str2) {
+    int answer = 0;
+
+    transform(str1.begin(), str1.end(), str1.begin(), ::tolower);
+    transform(str2.begin(), str2.end(), str2.begin(), ::tolower);
+
+    vector<int> multiset1(676, 0);
+    vector<int> multiset2(676, 0);
+    
+    for (int i = 0; i < str1.length() - 1; i++) {
+        char first = str1[i];
+        char second = str1[i+1];
+
+        if (first >= 97 && first <= 122 && second >= 97 && second <= 122 ) {
+            multiset1[(first-97)*26 + (second-97)]++;
+        }
+    }
+
+    for (int i = 0; i < str2.length() - 1; i++) {
+        char first = str2[i];
+        char second = str2[i+1];
+
+        if (first >= 97 && first <= 122 && second >= 97 && second <= 122 ) {
+            multiset2[(first-97)*26 + (second-97)]++;
+        }
+    }
+
+    int numberOfIntersection = 0;
+    int numberOfUnion = 0;
+
+    for (int i = 0; i < 676; i++) {
+        numberOfUnion += max(multiset1[i], multiset2[i]);
+        numberOfIntersection += min(multiset1[i], multiset2[i]);
+    }
+
+    if(numberOfUnion == 0)
+        return 65536;
+    else
+        return (int)(((double) numberOfIntersection / (double) numberOfUnion) * (double) 65536);
+    
+    return answer;
+}
