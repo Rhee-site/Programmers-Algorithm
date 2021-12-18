@@ -1,0 +1,40 @@
+#include <string>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+vector<int> solution(string msg) {
+    vector<int> answer;
+    
+    unordered_map<string, int> UnMAP;
+    
+    for(int index = 1; index < 27; index++){
+        string strTemp;
+        strTemp = 'A' + index - 1;
+        UnMAP.emplace(strTemp, index);
+    }
+    
+    int nTarget = 27;
+    
+    for(int index = 0; index < msg.size(); index++){
+        string strTemp;
+        strTemp += msg[index];
+        int nTempIndex = index;
+        int nCount = 0;
+        
+        while(UnMAP.find(strTemp) != UnMAP.end()){
+            nCount++;
+            nTempIndex++;
+            strTemp += msg[nTempIndex];
+        }
+        
+        index += nCount - 1;
+        UnMAP.emplace(strTemp, nTarget++);
+        strTemp.pop_back();
+        answer.emplace_back(UnMAP[strTemp]);
+    }
+    
+    
+    return answer;
+}
