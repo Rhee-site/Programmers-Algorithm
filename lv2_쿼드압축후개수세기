@@ -1,0 +1,46 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+void DFS(int x, int y, int Size, vector<vector<int>> & arr, vector<int> &answer)
+{
+    bool Zero = true;
+    bool One = true;
+    for (int i = x; i < x + Size; i++)
+    {
+        for (int j = y; j < y + Size; j++)
+        {
+            if (!arr[i][j]) 
+                One = false;
+            if (arr[i][j]) 
+                Zero = false;
+        }
+    }
+ 
+    if (Zero)
+    {
+        answer[0]++;
+        return;
+    }
+    if (One)
+    {
+        answer[1]++;
+        return;
+    }
+ 
+    DFS(x, y, Size / 2, arr, answer);
+    DFS(x, y + Size / 2, Size / 2, arr, answer);
+    DFS(x + Size / 2, y, Size / 2, arr, answer);
+    DFS(x + Size / 2, y + Size / 2, Size / 2, arr, answer);
+}
+
+vector<int> solution(vector<vector<int>> arr) {
+    vector<int> answer;
+    
+    answer.push_back(0);
+    answer.push_back(0);
+    DFS(0, 0, arr.size(), arr, answer);
+    
+    return answer;
+}
