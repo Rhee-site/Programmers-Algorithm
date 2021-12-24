@@ -1,0 +1,32 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+void makeWord(string strWord, int nLength, vector<char> VecChcandidate, vector<string> & VecstrWord){
+    if(nLength == strWord.size()){
+        VecstrWord.push_back(strWord);
+        return;
+    }
+    
+    for(int index = 0; index < VecChcandidate.size(); index++)
+        makeWord(strWord + VecChcandidate[index], nLength, VecChcandidate, VecstrWord);
+}
+
+int solution(string word) {
+    int answer = 0;
+    
+    vector<char> VecChcandidate = {'A', 'E', 'I', 'O', 'U'};
+    vector<string> VecstrWord;
+    
+    for(int index = 1; index < 6; index++){
+        string strWord = "";
+        makeWord(strWord, index, VecChcandidate, VecstrWord);
+    }
+    
+    sort(VecstrWord.begin(), VecstrWord.end());
+
+    answer = find(VecstrWord.begin(), VecstrWord.end(), word) - VecstrWord.begin() + 1;
+    
+    return answer;
+}
