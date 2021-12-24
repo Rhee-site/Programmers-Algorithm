@@ -1,0 +1,71 @@
+#include <string>
+#include <vector>
+#include <sstream>
+#include <map>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+vector<int> solution(vector<string> info, vector<string> query) {
+    vector<int> answer;
+    
+    map<string, vector<int>> db;
+    
+    for(int i = 0; i < info.size(); i++){
+        string token;
+        stringstream ss(info[i]);
+        vector<vector<string>> str(4, vector<string>(2, "-"));
+        int index = 0, score = 0;
+        
+        while(ss >> token){
+            if(index < 4){
+                str[index++][0] = token;    
+            }
+            else{
+                score = stoi(token);
+            }
+        }
+        
+        for(int i = 0; i < 2; i++){
+            string t1, t2, t3, t4;
+            t1 = str[0][i];
+            for(int j = 0; j < 2; j++){
+                t2 = str[1][j];
+                for(int k = 0; k < 2; k++){
+                    t3 = str[2][k];
+                    for(int l = 0; l < 2; l++){
+                        t4 = str[3][l];
+                        db[t1 + t2 + t3 + t4].push_back(score);
+                    }
+                }
+            }
+        }
+    }
+    
+    for(map<string, vector<int>>::iterator iter = db.begin(); iter != db.end();){
+        sort(iter->second.begin(), iter->second.end());
+        iter++;
+    }
+    
+    for(int index = 0; index < query.size(); index++){
+        stringstream ss(query[index]);
+        string strTemp;
+        string strContext;
+        int nLocation = 0;
+        int nTemp = 0;
+        while(getline(ss, strTemp, ' ')){
+            if(strTemp != "and"){
+                if(nLocation < 4)
+                    strContext += strTemp;
+                else
+                    nTemp = stoi(strTemp);
+                nLocation++;
+            }
+        }
+        
+        auto iter = lower_bound(db[strContext].begin(), db[strContext].end(), nTemp);
+        answer.push_back(db[strContext].size() - (iter - db[strContext].begin()));
+    }
+    
+    return answer;
+}
