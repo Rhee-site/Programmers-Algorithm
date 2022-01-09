@@ -1,0 +1,67 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<vector<int>> lotate(vector<vector<int>> key) {
+	int temp = 0;
+	int size = key.size();
+	for (int x = 0; x < size/2; x++) {
+		for (int y = x; y < size - 1 - x; y++) {
+			temp = key[x][y];
+			key[x][y] = key[size - 1 - y][x];
+			key[size - 1 - y][x] = key[size - 1 - x][size - 1 - y];
+			key[size - 1 - x][size - 1 - y] = key[y][size - 1 - x];
+			key[y][size - 1 - x] = temp;
+		}
+	}
+	return key;
+}
+
+bool sum(int x, int y, vector<vector<int>> key, vector<vector<int>> board) {
+	int ks = key.size(); //3
+	int bs = board.size(); // 7
+	for (int i = 0; i < ks; i++) {
+		for (int j = 0; j < ks; j++) {
+			board[x+i][y+j] += key[i][j];
+		}
+	}
+
+	for (int i = ks-1; i < bs-ks+1; i++) {
+		for (int j = ks-1; j < bs-ks+1; j++) {
+			if (board[i][j] != 1) {
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+bool solution(vector<vector<int>> key, vector<vector<int>> lock) {
+    bool answer = false;
+    
+    int ks = key.size();
+	int ls = lock.size();
+	int bs = ls + ks + ks - 2;
+	vector<vector<int>>board(bs,vector<int>(bs,0));
+	for (int i = 0; i < ls; i++) {
+		for (int j = 0; j < ls; j++) {
+			board[i + ks - 1][j + ks - 1] = lock[i][j];
+		}
+	}
+	
+	for (int l = 0; l < 4; l++) {
+		for (int i = 0; i < ks + ls - 1; i++) {
+			for (int j = 0; j < ks + ls - 1; j++) {
+				if (sum(i, j, key, board)) {
+					answer = true;
+					return true;
+				}
+			}
+		}
+		key = lotate(key);
+	}
+    
+    return answer;
+}
