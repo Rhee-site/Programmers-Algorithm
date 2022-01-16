@@ -1,0 +1,54 @@
+#include <string>
+#include <vector>
+#include <set>
+
+using namespace std;
+
+void DFS(vector<string> user_id, vector<string> banned_id, int nTargetIndex, set<string> & s, vector<bool> & VecbCheck){
+    if(nTargetIndex == banned_id.size()){
+        string strTemp = "";
+        for(int index = 0; index < user_id.size(); index++)
+            if(VecbCheck[index])
+                strTemp += user_id[index];
+    
+        s.insert(strTemp);
+        return;
+    }
+    
+    for(int index = 0; index < user_id.size(); index++){
+        if(VecbCheck[index])
+            continue;
+        
+        if(user_id[index].length() != banned_id[nTargetIndex].length())
+            continue;
+        
+        bool bIsAble = true;
+        
+        for(int sub = 0; sub < user_id[index].length(); sub++){
+            if(banned_id[nTargetIndex][sub] == '*')
+                continue;
+            
+            if(banned_id[nTargetIndex][sub] != user_id[index][sub]){
+                bIsAble = false;
+                break;
+            }
+        }
+        
+        if(bIsAble){
+            VecbCheck[index] = true;
+            DFS(user_id, banned_id, nTargetIndex + 1, s, VecbCheck);
+            VecbCheck[index] = false;
+        }
+    }
+}
+
+int solution(vector<string> user_id, vector<string> banned_id) {
+    int answer = 0;
+    
+    vector<bool> VecbCheck(8, false);
+    set<string> s;
+    DFS(user_id, banned_id, 0, s, VecbCheck);
+    answer = s.size();
+    
+    return answer;
+}
