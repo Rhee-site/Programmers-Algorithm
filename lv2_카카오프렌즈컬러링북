@@ -1,0 +1,71 @@
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+int BFS(int nRows, int nCols, int m, int n, vector<vector<int>> picture, vector<vector<bool>> & VecVecbCheck){
+    int Color = picture[nRows][nCols];
+    int Size = 1;
+    queue<pair<int,int>> Q;
+    Q.push(make_pair(nRows,nCols));
+    VecVecbCheck[nRows][nCols] = true;
+    
+    vector<int> dx;
+    dx.push_back(0);
+    dx.push_back(0);
+    dx.push_back(1);
+    dx.push_back(-1);
+    
+    vector<int> dy;
+    dy.push_back(1);
+    dy.push_back(-1);
+    dy.push_back(0);
+    dy.push_back(0);
+    
+    while(Q.empty() == 0)
+    {
+        int x = Q.front().first;
+        int y = Q.front().second;
+        Q.pop();
+        
+        for(int i = 0 ; i < 4; i++)
+        {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            if(nx >= 0 && ny >= 0 && nx < m && ny < n)
+            {
+                if(picture[nx][ny] == Color && VecVecbCheck[nx][ny] == false)
+                {
+                    VecVecbCheck[nx][ny] = true;
+                    Q.push(make_pair(nx,ny));
+                    Size++;
+                }
+            }
+        }
+    }
+    return Size;
+}
+
+vector<int> solution(int m, int n, vector<vector<int>> picture) {
+    int number_of_area = 0;
+    int max_size_of_one_area = 0;
+    
+    vector<vector<bool>> VecVecCheck(100, vector<bool>(100, false));;
+    
+    for(int nRows = 0; nRows < m; nRows++){
+        for(int nCols = 0; nCols < n; nCols++){
+            if(picture[nRows][nCols] != 0 && VecVecCheck[nRows][nCols] == false){
+                int nSize = BFS(nRows, nCols, m, n, picture, VecVecCheck);
+                if(nSize > max_size_of_one_area)
+                    max_size_of_one_area = nSize;
+                number_of_area++;
+            }
+        }
+    }
+    
+    vector<int> answer(2);
+    answer[0] = number_of_area;
+    answer[1] = max_size_of_one_area;
+    
+    return answer;
+}
