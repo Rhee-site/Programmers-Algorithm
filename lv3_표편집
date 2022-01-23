@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include <set>
+#include <stack>
+#include <iostream>
+using namespace std;
+
+string solution(int n, int k, vector<string> cmd) {    
+    string answer = "";
+    
+    for(int index = 0; index < n; index++)
+        answer += 'X';
+    
+    set<int> table;
+    stack<int> hist;
+    
+    for(int index = 0; index < n; index++)
+        table.insert(index);
+    
+    auto Current = table.find(k);
+        
+    for(string s : cmd){
+        if(s.front() == 'U' || s.front() == 'D'){
+            int nTemp = stoi(s.substr(2));
+            if(s.front() == 'U'){
+                while(nTemp--)
+                    Current = prev(Current);
+            }
+            else{
+                while(nTemp--)
+                    Current = next(Current);
+            }
+        }
+        else if(s.front() == 'C'){
+            hist.push(*Current);
+            Current = table.erase(Current);
+            if(Current == table.end())
+                Current = prev(Current);
+        }
+        else if(s.front() == 'Z'){
+            table.insert(hist.top());
+            hist.pop();
+        }
+        else
+            return "";   
+    }
+    
+    for(int index : table)
+        answer[index] = 'O';
+    
+    return answer;
+}
