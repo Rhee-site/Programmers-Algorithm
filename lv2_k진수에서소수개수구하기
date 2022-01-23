@@ -1,0 +1,54 @@
+#include <string>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+string ConvertDomain(int nSrc, int nTarget){
+    string strResult = "";
+    while(nSrc){
+        strResult += to_string(nSrc % nTarget);
+        nSrc /= nTarget;
+    }
+    return string(strResult.rbegin(), strResult.rend());
+}
+
+bool CheckPrimeNumber(long long nSrc){
+    if(nSrc < 2)
+        return false;
+    
+    for(int index = 2; index <= sqrt(nSrc); ++index)
+            if(nSrc % index == 0)
+                return false;
+    
+    return true;
+}
+
+int solution(int n, int k) {
+    int answer = -1;
+    
+    string strNumber = ConvertDomain(n, k);
+    
+    string strTemp = "";
+    int nResult = 0;
+    for(int index = 0; index < strNumber.size(); ++index){
+        if(strNumber[index] == '0' && !strTemp.empty()){
+            long long n = stoll(strTemp);
+            if(CheckPrimeNumber(n))
+                nResult++;
+            strTemp.clear();
+        }
+        else
+            strTemp += strNumber[index];
+    }
+    
+    if(!strTemp.empty()){
+        long long n = stoll(strTemp);
+        if(CheckPrimeNumber(n))
+            nResult++;
+    }
+    
+    answer = nResult;
+    
+    return answer;
+}
