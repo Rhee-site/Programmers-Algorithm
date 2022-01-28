@@ -1,0 +1,32 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int solution(int k, vector<vector<int>> dungeons) {
+    int answer = -1;
+    
+    vector<int> VecnTemp;
+    for(int index = 0; index < dungeons.size(); index++)
+        VecnTemp.push_back(index);
+    
+    do{
+        int nCopyKey = k;
+        int nCount = 0;
+        
+        for(int index = 0; index < VecnTemp.size(); index++){
+            int nMinHealth = dungeons[VecnTemp[index]].front();
+            int nUsedHealth = dungeons[VecnTemp[index]].back();
+            
+            if(nMinHealth > nCopyKey)
+                continue;
+            
+            nCopyKey -= nUsedHealth;
+            nCount++;
+        }
+        
+        answer = max(answer, nCount);
+    }while(next_permutation(VecnTemp.begin(), VecnTemp.end()));
+    
+    return answer;
+}
