@@ -1,0 +1,55 @@
+#include <string>
+#include <vector>
+#include <set>
+#include <unordered_map>
+
+using namespace std;
+
+vector<int> solution(vector<string> gems) {
+    vector<int> answer;
+
+    set<string> setgems(gems.begin(), gems.end());
+    unordered_map<string, int> unMap;
+    int nMin = 0;
+    int nStart = 0;
+    int nEnd = 0;
+    
+    for(auto & s : gems){
+        unMap[s]++;
+        if(unMap.size() == setgems.size())
+            break;
+        nEnd++;
+    }
+    
+    nMin = nEnd - nStart;
+    answer.push_back(nStart + 1);
+    answer.push_back(nEnd + 1);
+    
+    while(true){
+        if(nEnd >= gems.size())
+            break;
+        
+        string strKey = gems[nStart];
+        unMap[strKey]--;
+        nStart++;
+        
+        if(unMap[strKey] == 0){
+            nEnd++;
+            for(; nEnd < gems.size(); nEnd++){
+                unMap[gems[nEnd]]++;
+                if(strKey == gems[nEnd])
+                    break;
+            }
+            if(nEnd == gems.size())
+                break;
+        }
+        
+        if(nMin > nEnd - nStart){
+            answer.front() = nStart + 1;
+            answer.back() = nEnd + 1;
+            nMin = nEnd - nStart;
+        }
+    }
+    
+    return answer;
+}
