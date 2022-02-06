@@ -1,0 +1,44 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(vector<string> lines) {
+    int answer = 0;
+    
+    vector<int> VecnStartTime;
+    vector<int> VecnEndTime;
+    
+    for(int index = 0; index < lines.size(); index++){
+        string strHour, strMin, strSec, strMSec;
+        int nHour, nMin, nSec, nProcess;
+        
+        lines[index].pop_back();
+        strHour = lines[index].substr(11, 2);
+        strMin = lines[index].substr(14, 2);
+        strSec = lines[index].substr(17, 2);
+        strMSec = lines[index].substr(20, 3);
+        nProcess = stof(lines[index].substr(24, 5)) * 1000; 
+        
+        nHour = stoi(strHour) * 3600 * 1000;
+        nMin = stoi(strMin) * 60 * 1000;
+        nSec = stoi(strSec) * 1000 + stoi(strMSec);
+        
+        VecnStartTime.push_back(nHour + nMin + nSec - nProcess + 1);
+        VecnEndTime.push_back(nHour + nMin + nSec);
+    }
+    
+    for(int index = 0; index < lines.size(); index++){
+        int nEndTime = VecnEndTime[index] + 1000;
+        int nCount = 0;
+        
+        for(int nTemp = index; nTemp < lines.size(); nTemp++)
+            if(VecnStartTime[nTemp] < nEndTime)
+                nCount++;
+        
+        if(answer < nCount)
+            answer = nCount;
+    }
+    
+    return answer;
+}
