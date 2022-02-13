@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+vector<string> solution(vector<vector<int>> line) {
+    long long minX = LLONG_MAX;
+    long long minY = LLONG_MAX;
+    long long maxX = LLONG_MIN;
+    long long maxY = LLONG_MIN;
+    
+    vector<pair<long long, long long>> cordinates;
+    int nLineSize = line.size();
+    
+    for(int index = 0; index < nLineSize; index++){
+        for(int Sub = index + 1; Sub < nLineSize; Sub++){
+            long long CrossPoint1 = line[index][0];
+            long long CrossPoint2 = line[index][1];
+            long long CrossPoint3 = line[index][2];
+            long long CrossPoint4 = line[Sub][0];
+            long long CrossPoint5 = line[Sub][1];
+            long long CrossPoint6 = line[Sub][2];
+            
+            long long xNumerator = CrossPoint2 * CrossPoint6 * 1LL - CrossPoint3 * CrossPoint5 * 1LL; 
+            long long yNumerator = CrossPoint3 * CrossPoint4 * 1LL - CrossPoint1 * CrossPoint6 * 1LL; 
+            long long mod = CrossPoint1 * CrossPoint5 * 1LL - CrossPoint2 * CrossPoint4 * 1LL;
+            
+            if(!mod)
+                continue;
+            
+            if(xNumerator % mod || yNumerator % mod)
+                continue;
+            
+            long long x = xNumerator / mod; 
+            long long y = yNumerator / mod; minX = min(minX, x); 
+            minY = min(minY, y); 
+            maxX = max(maxX, x); 
+            maxY = max(maxY, y); 
+            cordinates.push_back({ x, y });
+        }
+    }
+    
+    string row = string(maxX - minX + 1, '.'); 
+    vector<string> answer(maxY - minY + 1, row); 
+    for (auto coord : cordinates) { 
+        answer[abs(coord.second - maxY)][abs(coord.first - minX)] = '*'; 
+    }
+
+    return answer;
+}
