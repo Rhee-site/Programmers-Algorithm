@@ -1,0 +1,57 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int m, int n, vector<string> board) {
+    int answer = 0;
+    
+    vector<vector<bool>> VecVecbCheckSqaure(m, vector<bool>(n, false));
+    bool bCheckRemove = false;
+
+    do {
+        for (int index = 0; index < VecVecbCheckSqaure.size(); index++)
+            fill(VecVecbCheckSqaure[index].begin(), VecVecbCheckSqaure[index].end(), false);
+        
+        bCheckRemove = false;
+
+        for (int nRow = 0; nRow < m; nRow++) {
+            for (int nCol = 0; nCol < n; nCol++) {
+                if (nRow == 0 || nCol == 0 || board[nRow][nCol] == '0')
+                    continue;
+                
+                if (board[nRow - 1][nCol - 1] == board[nRow][nCol - 1] && board[nRow - 1][nCol - 1] == board[nRow - 1][nCol] && board[nRow - 1][nCol - 1] == board[nRow][nCol]) {
+                    VecVecbCheckSqaure[nRow][nCol] = true;
+                    VecVecbCheckSqaure[nRow - 1][nCol] = true;
+                    VecVecbCheckSqaure[nRow][nCol - 1] = true;
+                    VecVecbCheckSqaure[nRow - 1][nCol - 1] = true;
+                    bCheckRemove = true;
+                }
+            }
+        }
+
+        for (int nRow = 0; nRow < m; nRow++) {
+            for (int nCol = 0; nCol < n; nCol++) {
+                if (VecVecbCheckSqaure[nRow][nCol] == true) {
+                    board[nRow][nCol] = '0';
+                    answer++;
+                }
+            }
+        }
+
+        for (int nRow = 1; nRow < m; nRow++) {
+            for (int nCol = 0; nCol < n; nCol++) {
+                if (board[nRow][nCol] == '0') {
+                    for (int nTemp = nRow; nTemp > 0; nTemp--) {
+                        if (board[nTemp - 1][nCol] == '0')
+                            break;
+                        board[nTemp][nCol] = board[nTemp - 1][nCol];
+                        board[nTemp - 1][nCol] = '0';
+                    }
+                }
+            }
+        }
+    } while (bCheckRemove);
+    
+    return answer;
+}
