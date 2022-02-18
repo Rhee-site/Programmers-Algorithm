@@ -1,0 +1,75 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+string solution(int n, int t, int m, vector<string> timetable) {
+    string answer = "";
+    
+    unsigned int nStartTime = 540;
+    unsigned int nWaitTime = 0;
+    unsigned int nWaitHour = 0;
+    unsigned int nWaitMin = 0;
+    unsigned int nCount = 0;
+    bool bFlag = true;
+    
+    sort(timetable.begin(),timetable.end(),greater<string>());
+    
+    for(int index = 0; index < n; index++){
+        nCount = 0;
+        
+        while(nCount < m){
+            if(!timetable.empty()){
+                nWaitHour = stoi(timetable.back().substr(0,2));
+                nWaitMin = stoi(timetable.back().substr(3,2));
+                nWaitTime = (60 * nWaitHour) + nWaitMin;
+                
+                if(nWaitTime <= nStartTime){
+                    if(index == n-1 && nCount == m-1){
+                        nStartTime = nWaitTime-1;
+                        bFlag = false;
+                        break;
+                    }
+                    else{
+                        nCount++;
+                        timetable.pop_back();
+                    }
+                }
+                else{
+                    if(index == n-1){
+                        nStartTime = 540+(n-1)*t;
+                        bFlag = false;
+                        break;
+                    }
+                    nStartTime += t;
+                    break;
+                }
+            }
+            else{
+                nStartTime = 540 + (n-1) * t;
+                bFlag = false;
+                break;
+            }
+        }
+        
+        if(bFlag == false) 
+            break;
+        
+        if(nCount == m) 
+            nStartTime += t;
+    }
+    
+    if(nStartTime / 60 < 10) 
+        answer = "0" + to_string(nStartTime / 60);
+    else 
+        answer = to_string(nStartTime / 60);
+    
+    answer+=":";
+    
+    if(nStartTime % 60 < 10) 
+        answer += "0"+to_string(nStartTime % 60);
+    else 
+        answer += to_string(nStartTime % 60);
+    
+    return answer;
+}
