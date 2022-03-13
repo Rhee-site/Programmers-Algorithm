@@ -1,0 +1,40 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int getState(int nNode, vector<int> & VecnNode){
+    if(VecnNode[nNode] == nNode)
+        return nNode;
+    return VecnNode[nNode] = getState(VecnNode[nNode], VecnNode);
+}
+
+bool Compare(vector<int> VecnFirst, vector<int> VecnSecond){
+    return VecnFirst[2] < VecnSecond[2]; 
+}
+
+int solution(int n, vector<vector<int>> costs) {
+    int answer = 0;
+    
+    vector<int> VecnNode(101);
+    for(int index = 0; index < n; index++)
+        VecnNode[index] = index;
+    
+    sort(costs.begin(), costs.end(), Compare);
+    
+    for(int index = 0; index < costs.size(); index++){
+        int nStart = getState(costs[index][0], VecnNode);
+        int nEnd = getState(costs[index][1], VecnNode);
+        int nCost = costs[index][2];
+        
+        if(nStart != nEnd){
+            answer += nCost;
+            VecnNode[nEnd] = nStart;
+        }
+        
+    }
+    
+    
+    return answer;
+}
