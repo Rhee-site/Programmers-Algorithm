@@ -1,0 +1,23 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int n, vector<int> money) {
+    int answer = 0;
+    
+    long long DP[100001];
+    DP[0] = 1;
+    for(int index = 0; index < n + 1; index += money.front() )
+        DP[index] = 1;
+    
+    for(int index = 1; index < money.size(); index++){
+        for(int temp = 0; temp < n + 1; temp++){
+            if(temp >= money[index])
+                DP[temp] += DP[temp - money[index]] % 1000000007;
+        }
+    }
+    answer = DP[n];
+    
+    return answer;
+}
