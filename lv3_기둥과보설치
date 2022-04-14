@@ -1,0 +1,64 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+bool bCheckPossible(int x, int y, int a, vector<vector<vector<int>>> map){ 
+    if(a == 0){ 
+        if(!y || (y-1 >= 0 && map[0][x][y-1]) || map[1][x][y] || (x-1 >= 0 && map[1][x-1][y])) 
+            return true; 
+    } 
+    else{ 
+        if((y-1 >= 0 && map[0][x][y-1]) || (y-1 >= 0 && map[0][x+1][y-1]) || (x-1 >= 0 && map[1][x-1][y] && map[1][x+1][y])) 
+            return true; 
+    } 
+    return false; 
+}
+
+vector<vector<int>> solution(int n, vector<vector<int>> build_frame) {
+    vector<vector<int>> answer;
+    
+    vector<vector<vector<int>>> map;
+    map.assign(2, vector<vector<int>>(n + 1, vector<int>(n + 1)));
+    
+    int nLength = build_frame.size();
+    int nXLocation = 0;
+    int nYLocation = 0;
+    int nMode = 0;
+    int nDelete = 0;
+    
+    for(int index = 0; index < nLength; index++){
+        nXLocation = build_frame[index][0];
+        nYLocation = build_frame[index][1];
+        nMode = build_frame[index][2];
+        nDelete = build_frame[index][3];
+        
+        if(nDelete == 0){
+            map[nMode][nXLocation][nYLocation] = 0;
+            for(int nRow = 0; nRow <= n; nRow++){
+                for(int nCol = 0; nCol <= n; nCol++){
+                    for(int nTemp = 0; nTemp < 2; nTemp++){
+                        if(map[nMode][nXLocation][nYLocation] == 1)
+                            break;
+                        if(map[nTemp][nRow][nCol] == 1 && (bCheckPossible(nRow, nCol, nTemp, map) == false))
+                            map[nMode][nXLocation][nYLocation] = 1;
+                    }
+                }
+            }
+        }
+        else
+            if(bCheckPossible(nXLocation, nYLocation, nMode, map))
+                map[nMode][nXLocation][nYLocation] = 1;
+    }
+    
+    for(int nRow = 0; nRow <= n; nRow++){
+        for(int nCol = 0; nCol <= n; nCol++){
+            for(int nTemp = 0; nTemp < 2; nTemp++){
+                if(map[nTemp][nRow][nCol] == 1)
+                    answer.push_back({nRow, nCol, nTemp});
+            }
+        }
+    }
+    
+    return answer;
+}
