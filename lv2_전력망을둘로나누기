@@ -1,0 +1,60 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+void DFS(int nPos, int &nCount, int nTowerCount, vector<vector<bool>> & board){
+    nCount++;
+    for(int index = 0; index <= nTowerCount; index++){
+        if(board[nPos][index]){
+            board[nPos][index] = false;
+            board[index][nPos] = false;
+            DFS(index, nCount, nTowerCount, board);
+            board[nPos][index] = true;
+            board[index][nPos] = true;
+        }
+    }
+}
+
+void CalcDiff(int nSrc, int nDst, int &nMinDiff, int nTowerCount, vector<vector<bool>> & board){
+    int nGapCount1 = 0;
+    int nGapCount2 = 0;
+    DFS(nSrc, nGapCount1, nTowerCount, board);
+    DFS(nDst, nGapCount2, nTowerCount, board);
+    if(abs(nGapCount1 - nGapCount2) < nMinDiff)
+        nMinDiff = abs(nGapCount1 - nGapCount2);
+}
+
+int solution(int n, vector<vector<int>> wires) {
+    int answer = -1;
+    
+    int nTowerCount = n;
+    int nMinDiff = n;
+    vector<vector<bool>> board;
+    board.resize(n + 1);
+    
+    for(int nCol = 0; nCol <= n; nCol++){
+        for(int nRow = 0; nRow <= n; nRow++){
+            board[nCol].push_back(false);
+        }
+    }
+    
+    for(int index = 0; index < wires.size(); index++){
+        board[wires[index][0]][wires[index][1]] = true;
+        board[wires[index][1]][wires[index][0]] = true;
+    }
+    
+    for(int index = 0; index < wires.size(); index++){
+        board[wires[index][0]][wires[index][1]] = false;
+        board[wires[index][1]][wires[index][0]] = false;
+        
+        CalcDiff(wires[index][0], wires[index][1], nMinDiff, nTowerCount, board);
+        
+        board[wires[index][0]][wires[index][1]] = true;
+        board[wires[index][1]][wires[index][0]] = true;
+    }
+    
+    answer = nMinDiff;
+    
+    return answer;
+}
