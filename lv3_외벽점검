@@ -1,0 +1,38 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int solution(int n, vector<int> weak, vector<int> dist) {
+    int answer = 1e9;
+    
+    sort(dist.begin(), dist.end());
+        
+    int nWeakCount = weak.size();
+    weak.resize(2 * nWeakCount);
+    for(int index = nWeakCount; index < weak.size(); index++)
+        weak[index] = weak[index - nWeakCount] + n;
+    
+    do{
+        for(int nWeak = 0; nWeak < nWeakCount; nWeak++){
+            int nStart = weak[nWeak];
+            int nEnd = weak[nWeak + nWeakCount - 1];
+            for(int nDist = 0; nDist < dist.size(); nDist++){
+                nStart += dist[nDist];
+                if(nStart >= nEnd){
+                    answer = min(answer, nDist + 1);
+                    break;
+                }
+                int nNext = upper_bound(weak.begin(), weak.end(), nStart) - weak.begin();
+                nStart = weak[nNext];
+            }
+            
+        }      
+    }while(next_permutation(dist.begin(), dist.end()));
+    
+    if(answer == 1e9)
+        answer = -1;
+    
+    return answer;
+}
