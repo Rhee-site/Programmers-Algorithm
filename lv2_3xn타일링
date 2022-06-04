@@ -1,0 +1,27 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int n) {
+    int answer = 0;
+    
+    if(n % 2)
+        return 0;
+    
+    long long DP[5001] = {0, };
+    DP[0] = 1;
+    DP[2] = 3;
+    
+    for(int index = 4; index <= n; index += 2){
+        DP[index] = DP[index - 2] * 3;
+        for(int jndex = index - 4; jndex >= 0; jndex -= 2){
+            DP[index] = DP[index] + DP[jndex] * 2;
+        }
+        DP[index] = DP[index] % 1000000007;
+    }
+    
+    answer = (int)DP[n];
+    
+    return answer;
+}
