@@ -1,0 +1,27 @@
+#include <string>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+int CheckValid(int nNumber){
+    int nTemp = sqrt(nNumber);
+    for(int index = 2; index <= nTemp; index++ ){
+        int nShare = nNumber / index;
+        if(nNumber % index == 0 && nNumber / index <= 10000000)
+            return nNumber / index;
+    }
+    return 1;
+}
+
+vector<int> solution(long long begin, long long end) {
+    vector<int> answer;
+    
+    for(int index = begin; index <= end; index++)
+        answer.emplace_back(CheckValid(index));
+    
+    if(begin == 1)
+        answer[0] = 0;
+    
+    return answer;
+}
