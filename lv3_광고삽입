@@ -1,0 +1,76 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int ConvertStringToInt(string strSrc){
+    string strHour = strSrc.substr(0, 2);
+    int nHour = stoi(strHour) * 3600;
+    
+    string strMin = strSrc.substr(3, 2);
+    int nMin = stoi(strMin) * 60;
+    
+    string strSec = strSrc.substr(6, 2);
+    int nSec = stoi(strSec);
+    
+    return nHour + nMin + nSec;;
+}
+
+string ConvertIntToString(int nSrc){
+    string strResult = "";
+    int nHour = nSrc / 3600;
+    int nMin = (nSrc % 3600) / 60;
+    int nSec = nSrc % 60;
+    
+    if(nHour <= 9)
+        strResult += '0';
+    strResult += to_string(nHour);
+    strResult += ':';
+    
+    if(nMin <= 9)
+        strResult += '0';
+    strResult += to_string(nMin);
+    strResult += ':';
+    
+    if(nSec <= 9)
+        strResult += '0';
+    strResult += to_string(nSec);
+    
+    return strResult;
+}
+
+string solution(string play_time, string adv_time, vector<string> logs) {
+    string answer = "";
+    
+    int nPlayTime = ConvertStringToInt(play_time);
+    int nAdvTime = ConvertStringToInt(adv_time);
+    
+    vector<int> VecTotalPlayTime(360000, 0);
+    for(int i = 0; i < logs.size(); i++){
+        int nStart = ConvertStringToInt(logs[i].substr(0, 8));
+        int nEnd = ConvertStringToInt(logs[i].substr(9, 8));
+        for(int j = nStart + 1; j <= nEnd; j++)
+            VecTotalPlayTime[j]++;
+    }    
+    
+    long long nCurPlayTime = 0;
+    long long nMaxPlayTime = 0;
+    int nTime = 1;
+    
+    for(int index = 1; index <= nAdvTime; index++){
+        nCurPlayTime += VecTotalPlayTime[index];
+        nMaxPlayTime += VecTotalPlayTime[index];
+    }
+    
+    for(int index = 2; index <= (nPlayTime - nAdvTime + 1); index++){
+        nCurPlayTime += (long long)(VecTotalPlayTime[index + nAdvTime - 1] - VecTotalPlayTime[index - 1]);
+        if (nCurPlayTime > nMaxPlayTime)
+        {
+            nMaxPlayTime = nCurPlayTime;
+            nTime = index;
+        }
+    }
+    answer = ConvertIntToString(nTime - 1);
+    
+    return answer;
+}
