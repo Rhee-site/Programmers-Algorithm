@@ -1,0 +1,53 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int FindLastZeroPosition(string strSrc){
+    for(int index = strSrc.size() - 1; index >= 0; index--)
+        if(strSrc[index] == '0')
+            return index;
+    return -1;
+}
+
+vector<string> solution(vector<string> s) {
+    vector<string> answer;
+ 
+    for(int nRow = 0; nRow < s.size(); nRow++){
+        string strTemp  = "";
+        int nPosition = 0;
+        for(int nCol = 0; nCol < s[nRow].size(); nCol++){
+            strTemp += s[nRow][nCol];
+            if(strTemp.size() >= 3){
+                if(strTemp.substr(strTemp.size()- 3, 3) == "110"){
+                    nPosition++;
+                    strTemp.erase(strTemp.size() - 3, strTemp.size());
+                }
+            }
+        }
+        
+        int nTarget = FindLastZeroPosition(strTemp);
+        if(nTarget == -1){
+            string strResult = "";
+            while(nPosition--)
+                strResult += "110";
+            strResult += strTemp;
+            answer.push_back(strResult);
+        }
+        else {
+            string strResult = "";
+            for (int index = 0; index < strTemp.size(); index++){
+                if (index == nTarget){
+                    strResult += strTemp[index];
+                    while (nPosition--) 
+                        strResult += "110";
+                }
+                else 
+                    strResult += strTemp[index];
+            }
+            answer.push_back(strResult);
+        }
+    }
+    
+    return answer;
+}
