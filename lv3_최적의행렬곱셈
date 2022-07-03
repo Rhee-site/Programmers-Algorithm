@@ -1,0 +1,24 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int dp[201][201] = {};
+vector<vector<int>> v;
+
+int f(int x, int y) {
+	if (x == y || dp[x][y])	
+        return dp[x][y];
+	
+    dp[x][y] = f(x, x) + f(x + 1, y) + v[x][0] * v[x][1] * v[y][1];
+	
+    for (int i = x + 1; i < y; i++)
+		dp[x][y] = min(dp[x][y], f(x, i) + f(i + 1, y) + v[x][0] * v[i][1] * v[y][1]);
+	
+    return dp[x][y];
+}
+
+int solution(vector<vector<int>> matrix_sizes) {
+    v = matrix_sizes;
+    return f(0, matrix_sizes.size() - 1);
+}
