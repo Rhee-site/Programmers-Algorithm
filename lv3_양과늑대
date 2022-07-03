@@ -1,0 +1,42 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+void dfs(int currNode, int w, int s, vector<int> nextNodes, vector<int> info, int & answer, vector<vector<int>> & graph){
+    int animal = info[currNode];
+    if(!animal) {s++;}
+    else {w++;}
+    
+    answer = max(answer, s);
+    
+    if(w >= s) {return;}
+    
+    for(int i=0;i<nextNodes.size();++i) {
+        vector<int> next = nextNodes;
+        next.erase(next.begin()+i);
+        for(int j=0;j<graph[nextNodes[i]].size();++j) {
+            next.push_back(graph[nextNodes[i]][j]);
+        }
+        dfs(nextNodes[i],w,s,next,info, answer, graph);
+    }
+    
+    return;
+}
+
+int solution(vector<int> info, vector<vector<int>> edges) {
+    int answer = 0;
+    
+    vector<vector<int>> graph(info.size(), vector<int>());
+    
+    for(int index = 0; index < edges.size(); index++)
+        graph[edges[index][0]].push_back(edges[index][1]);
+    
+    vector<int> VecnState;
+    for(int index = 0; index < graph[0].size(); index++)
+        VecnState.push_back(graph[0][index]);
+    
+    dfs(0, 0, 0, VecnState, info, answer, graph);
+    
+    return answer;
+}
