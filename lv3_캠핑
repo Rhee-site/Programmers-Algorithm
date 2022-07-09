@@ -1,0 +1,39 @@
+#include <vector>
+#include <cmath>
+#include <algorithm>
+
+using namespace std;
+
+// 전역 변수를 정의할 경우 함수 내에 초기화 코드를 꼭 작성해주세요.
+int solution(int n, vector<vector<int>> data) {
+    int answer = 0;
+    
+    sort(data.begin(), data.end());
+    for(int nSrc = 0; nSrc < n; nSrc++){
+        int nXSrc = data[nSrc][0];
+        int nYSrc = data[nSrc][1];
+        
+        for(int nDst = nSrc + 1; nDst < n; nDst++){
+            int nXDst = data[nDst][0];
+            int nYDst = data[nDst][1];
+        
+            if(nXSrc == nXDst || nYSrc == nYDst)
+                continue;
+            
+            bool bCheck = true;
+            for(int nTemp = nSrc + 1; nTemp < nDst; nTemp++){
+                int nXTemp = data[nTemp][0];
+                int nYTemp = data[nTemp][1];
+                if((nXSrc < nXTemp && nXTemp < nXDst) && (min(nYSrc, nYDst) < nYTemp && nYTemp < max(nYSrc, nYDst))){
+                    bCheck = false;
+                    break;
+                }
+            }
+                
+            if(bCheck)
+                answer++;
+        }
+    }
+    
+    return answer;
+}
