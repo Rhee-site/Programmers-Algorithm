@@ -1,0 +1,30 @@
+#include <string>
+#include <vector>
+#include <iostream>
+using namespace std;
+
+int solution(vector<vector<int>> board, vector<vector<int>> skill) {
+    int answer = 0;
+    
+    for(int index = 0; index < skill.size(); index++){
+        for(int nRow = skill[index][1]; nRow <= skill[index][3]; nRow++){
+            for(int nCol = skill[index][2]; nCol <= skill[index][4]; nCol++){
+                if(skill[index][0] == 1){
+                   board[nRow][nCol] -= skill[index][5];
+                }
+                else if(skill[index][0] == 2){
+                    board[nRow][nCol] += skill[index][5];
+                }
+            }
+        }
+    }
+    
+    for(int nRow = 0; nRow < board.size(); nRow++){
+        for(int nCol = 0; nCol < board[nRow].size(); nCol++){
+            if(board[nRow][nCol] > 0)
+                answer++;
+        }
+    }
+    
+    return answer;
+}
