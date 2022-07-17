@@ -1,0 +1,50 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int solution(int n, vector<int> cores) {
+    int answer = 0;
+    
+    if(n <= cores.size())
+        return n;
+    
+    int nMin = *min_element(cores.begin(), cores.end());
+    
+    int nStart = n / cores.size() * nMin;
+    int nEnd = n * nMin;
+    
+    while(nStart <= nEnd){
+        int nMid = (nStart + nEnd) / 2;
+        int nCount = cores.size();
+        int nCurrentCount = 0;
+        
+        for(int index = 0; index < cores.size(); index++){
+            nCount += nMid / cores[index];
+            if(nMid % cores[index] == 0){
+                nCount--;
+                nCurrentCount++;
+            }
+        }
+        
+        if(nCount >= n){
+            nEnd = nMid - 1;
+        }
+        else if((nCount + nCurrentCount) < n){
+            nStart = nMid + 1;
+        }
+        else{
+            for(int index = 0; index < cores.size(); index++){
+                if(nMid % cores[index] == 0){
+                    nCount++;
+                }     
+                
+                if(nCount == n){
+                    return index + 1;
+                }
+            }
+        }
+    }
+    
+    return answer;
+}
