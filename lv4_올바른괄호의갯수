@@ -1,0 +1,30 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int solution(int n) {
+    int answer = 0;
+    
+    int nSum = 0;
+    vector<int> VecnSrc;
+    for(int index = 0; index < n; index++)
+        VecnSrc.push_back(-1);
+    for(int index = 0; index < n; index++)
+        VecnSrc.push_back(1);
+    
+    do{
+        nSum = 0;
+        answer++;
+        for(int index = 0; index < 2 * n; index++){
+            nSum += VecnSrc[index];
+            if(nSum < 0){
+                answer--;
+                break;
+            }
+        }
+    }while(next_permutation(VecnSrc.begin(), VecnSrc.end()));
+    
+    return answer;
+}
