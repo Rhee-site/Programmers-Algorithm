@@ -1,0 +1,25 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int solution(int n, vector<int> stations, int w)
+{
+    int answer = 0;
+
+    int nStart  = 1;
+    int nIndex = 0;
+    
+    while(nStart <= n){
+        if(nStart >= stations[nIndex] - w && nStart <= stations[nIndex] + w){
+            nStart = stations[nIndex] + w;
+            nIndex++;
+        }
+        else{
+            nStart += 2 * w;
+            answer++;
+        }
+        nStart++;
+    }
+
+    return answer;
+}
