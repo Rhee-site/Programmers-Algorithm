@@ -1,0 +1,128 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+typedef struct{
+    string strUrl;
+    vector<string> VecstrLink;
+    string strText;
+}Data;
+
+typedef struct{
+    int nBasic;
+    int nOutLinkCount;
+    double dLink;
+    double dMatch;
+}Score;
+
+int solution(string word, vector<string> pages) {
+    int answer = 0;
+    
+    vector<Data> data(pages.size());
+    vector<Score> score(pages.size());
+    
+    for (int i = 0; i < word.size(); ++i)
+        word[i] = tolower(word[i]);
+    
+    const string strMyLink1 = "<meta property=\"og:url\" content=\"https://";
+    const string strMyLink2 = "\"";
+    for(int index = 0; index < pages.size(); index++){
+        int nStart = pages[index].find(strMyLink1);
+        int nEnd = pages[index].find(strMyLink2, nStart + strMyLink1.size());
+        int nLength = nEnd - nStart - strMyLink1.size();
+        data[index].strUrl = pages[index].substr(nStart + strMyLink1.size(), nLength);
+    }
+    
+    const string strOutLink1 = "<a href=\"https://";
+    const string strOutLink2 = "\">";
+    for(int index = 0; index < pages.size(); index++){
+        int nStart = 0;
+        int nEnd = 0;
+        while(nStart != string::npos){
+            nStart = pages[index].find(strOutLink1, nEnd + strOutLink2.size());
+            nEnd = pages[index].find(strOutLink2, nStart + strOutLink1.size());
+            int nLength = nEnd - nStart - strOutLink1.size();
+            data[index].VecstrLink.push_back(pages[index].substr(nStart + strOutLink1.size(), nLength));
+        }
+    }
+    
+    const string strBodyStart = "<body>";
+    const string strBodyEnd = "</body>";
+    for(int index = 0; index < pages.size(); index++){
+        int nStart = pages[index].find(strBodyStart);
+        int nEnd = pages[index].find(strBodyEnd);
+        int nLength = nEnd - nStart - strBodyStart.size();
+        string strBody = pages[index].substr(nStart + strBodyStart.size(), nLength);
+        
+        bool bTag = false;
+        string strTemp = "";
+        for(int j = 0; j < strBody.size(); j++){
+            if(strBody[j] == '<'){
+                bTag = true;
+                continue;
+            }
+            
+            if(strBody[j] == '>'){
+                bTag = false;
+                continue;
+            }
+            
+            if(bTag == false)
+                strTemp += strBody[j];
+        }
+        
+        data[index].strText = strTemp;
+    }
+    
+    for(int index = 0; index < data.size(); index++){
+        for(int j = 0; j < data[index].strText.size(); j++){
+            if(data[index].strText[j] >= 'A' && data[index].strText[j] <= 'Z')
+                data[index].strText[j] = tolower(data[index].strText[j]);
+            if (data[index].strText[j] >= 'a' && data[index].strText[j] <= 'z')
+                continue;
+            data[index].strText[j] = ' ';
+        }
+        
+        vector<string> VecstrTemp;
+        string strTemp = "";
+        for(int j = 0; j < data[index].strText.size(); j++){
+            if(data[index].strText[j] == ' '){
+                VecstrTemp.push_back(strTemp);
+                strTemp = "";
+                continue;
+            }
+            strTemp += data[index].strText[j];
+        }
+        VecstrTemp.push_back(strTemp);
+        
+        score[index].nBasic = 0.0;
+        for(int j = 0; j < VecstrTemp.size(); j++)
+            if(VecstrTemp[j] == word)
+                score[index].nBasic++;
+    }
+    
+    for(int index = 0; index < data.size(); index++)
+        score[index].nOutLinkCount = data[index].VecstrLink.size();
+    
+    for(int i = 0; i < data.size(); i++){
+        score[i].dLink = 0.0;
+        for (int j = 0; j < data.size(); j++) {
+            for (int k = 0; k < data[j].VecstrLink.size(); k++) {
+                if (data[i].strUrl == data[j].VecstrLink[k])
+                    score[i].dLink += (double)score[j].nBasic / score[j].nOutLinkCount;
+            }
+        }
+    }
+    
+    double max = 0.0;
+    for (int i = 0; i < data.size(); ++i) {
+        score[i].dMatch = score[i].nBasic + score[i].dLink;
+        if (max < score[i].dMatch) {
+            max = score[i].dMatch;
+            answer = i;
+        }
+    }
+    
+    return answer;
+}
