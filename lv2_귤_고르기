@@ -1,0 +1,46 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+bool cmp(const pair<int, int> & Src, const pair<int, int>& Dst){
+    if(Src.second == Dst.second)
+        return Src.first > Dst.first;
+    else
+        return Src.second > Dst.second;
+}
+
+int solution(int k, vector<int> tangerine) {
+    int answer = 0;
+    
+    map<int, int> State;
+    for(int i : tangerine){
+        if(State.find(i) != State.end())
+            State[i] += 1;
+        else
+            State.insert(pair<int, int>(i, 1));
+    }
+    
+    vector<pair<int, int>> All_State(State.begin(), State.end());
+    
+    sort(All_State.begin(), All_State.end(), cmp);
+    
+    int CurrentIndex = 0;
+    
+    while(k > 0){
+        if(k <= All_State[CurrentIndex].second){
+            answer += 1;
+            break;
+        }
+        else{
+            answer += 1;
+            k-= All_State[CurrentIndex].second;
+        }
+        CurrentIndex += 1;
+    }
+    
+    return answer;
+}
