@@ -1,0 +1,23 @@
+#include <string>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+int solution(vector<string> want, vector<int> number, vector<string> discount) {
+    int answer = 0;
+    
+    unordered_map<string, int> Map;
+    for(int index = 0; index < number.size(); index++)
+        Map.insert({want[index], number[index]});
+    
+    for(int nCol = 0; nCol <= discount.size() - 10; nCol++){
+        unordered_map<string, int> MartMap;
+        for(int nRow = nCol; nRow < nCol + 10; nRow++)
+            MartMap[discount[nRow]]++;
+        if(MartMap == Map)
+            answer++;
+    }
+    
+    return answer;
+}
