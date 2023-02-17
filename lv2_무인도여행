@@ -1,0 +1,58 @@
+#include <string>
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+using namespace std;
+
+int dx [] = {1, -1, 0, 0};
+int dy [] = {0, 0, 1, -1};
+
+bool visited[100][100];
+
+vector<int> solution(vector<string> maps) {
+    vector<int> answer;
+    
+    for(int nCol = 0; nCol < maps.front().size(); nCol++){
+        for(int nRow = 0; nRow < maps.size(); nRow++){
+            if(visited[nRow][nCol] || maps[nRow][nCol] == 'X')
+                continue;
+            
+            queue<pair<int, int>> q;
+            q.push({nRow, nCol});
+            visited[nRow][nCol] = true;
+            int sum = maps[nRow][nCol] - '0';
+            
+            while(!q.empty()){
+                int x = q.front().second;
+                int y = q.front().first;
+                q.pop();    
+            
+                for(int dist = 0; dist < 4; dist++){
+                    int nNextX = x + dx[dist];
+                    int nNextY = y + dy[dist];
+                    
+                    if(nNextX < 0 || nNextX >= maps.front().size())
+                        continue;
+                    if(nNextY < 0 || nNextY >= maps.size())
+                        continue;
+                    if(visited[nNextY][nNextX] || maps[nNextY][nNextX] == 'X')
+                        continue;
+                    
+                    visited[nNextY][nNextX] = true;
+                    sum += maps[nNextY][nNextX] - '0';
+                    
+                    q.push({nNextY, nNextX});
+                }
+            }
+            
+            answer.push_back(sum);
+        }
+    }
+    
+    sort(answer.begin(), answer.end());
+    if(answer.empty())
+        answer.push_back(-1);
+    
+    return answer;
+}
