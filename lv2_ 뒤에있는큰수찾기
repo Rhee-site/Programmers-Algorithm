@@ -1,0 +1,25 @@
+#include <string>
+#include <vector>
+#include <stack>
+
+using namespace std;
+
+vector<int> solution(vector<int> numbers) {
+    vector<int> answer(numbers.size(), 0);
+    stack<int> tmp;    
+    
+    for(int index = 0; index < numbers.size(); index++){
+        while(!tmp.empty() && numbers[tmp.top()] < numbers[index]){
+            answer[tmp.top()] = numbers[index];   
+            tmp.pop();
+        }
+        tmp.push(index);
+    }
+    
+    while(!tmp.empty()){
+        answer[tmp.top()] = -1;
+        tmp.pop();
+    }
+    
+    return answer;
+}
