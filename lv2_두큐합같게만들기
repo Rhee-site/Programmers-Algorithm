@@ -1,0 +1,50 @@
+#include <string>
+#include <vector>
+#include <numeric>
+using namespace std;
+
+int solution(vector<int> queue1, vector<int> queue2) {
+    int answer = 0;
+    
+    int nSize = queue1.size();
+    long long nSumQ1 = 0;
+    long long nSumQ2 = 0;
+    long long nTargetValue = 0;
+    
+    nSumQ1 = accumulate(queue1.begin(), queue1.end(), 0LL);
+    nSumQ2 = accumulate(queue2.begin(), queue2.end(), 0LL);    
+    
+    if((nSumQ1 + nSumQ2) % 2 != 0)
+        return -1;
+    
+    nTargetValue = (nSumQ1 + nSumQ2) / 2;
+    
+    int nQ1Idx = 0;
+    int nQ2Idx = 0;
+    
+    while(nSumQ1 != nSumQ2){
+        if(nQ1Idx > nSize && nQ2Idx > nSize)
+            return -1;
+        
+        if(nSumQ1 > nSumQ2){
+            if(nQ1Idx == queue1.size() - 1)
+                return -1;
+            
+            nSumQ1 -= queue1[nQ1Idx];
+            queue2.push_back(queue1[nQ1Idx]);
+            nSumQ2 += queue1[nQ1Idx++];
+        }
+        else if (nSumQ1 < nSumQ2){
+            if(nQ2Idx == queue2.size() - 1)
+                return -1;
+            
+            nSumQ2 -= queue2[nQ2Idx];
+            queue1.push_back(queue2[nQ2Idx]);
+            nSumQ1 += queue2[nQ2Idx++];
+        }
+        
+        answer++;
+    }
+    
+    return answer;
+}
