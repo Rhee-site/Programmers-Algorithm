@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+static int nStandard = 0;
+
+bool compare(const vector<int> Src, const vector<int> Dst){
+    if(Src[nStandard] == Dst[nStandard]){
+       return Src[0] > Dst[0];
+    }
+    else{
+        if(Src[nStandard] > Dst[nStandard])
+            return false;
+        else
+            return true;
+    }
+}
+
+int solution(vector<vector<int>> data, int col, int row_begin, int row_end) {
+    int answer = 0;
+    
+    if(data.front().size() < col)
+        return -1;
+    
+    if(row_begin < 1 || row_end < 1)
+        return -1;
+    
+    if(row_begin > row_end)
+        return -1;
+    
+    if(data.size() < row_end)
+        return -1;
+    
+    nStandard = col - 1;
+    sort(data.begin(), data.end(), compare);
+    
+    vector<int> VecnMod;
+    for(int nRow = row_begin - 1; nRow < row_end; nRow++){
+        int nMod = 0;
+        for(int nCol = 0; nCol < data[nRow].size(); nCol++)
+            nMod += (data[nRow][nCol] % (nRow + 1));
+        VecnMod.push_back(nMod);
+    }
+    
+    answer = VecnMod.front();
+    for(int index = 1; index < VecnMod.size(); index++)
+        answer ^= VecnMod[index];
+    
+    return answer;
+}
