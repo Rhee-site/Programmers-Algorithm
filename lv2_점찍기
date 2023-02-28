@@ -1,0 +1,14 @@
+#include <string>
+#include <vector>
+#include <cmath>
+using namespace std;
+
+long long solution(int k, int d) {
+    long long answer = 0;
+    
+    for(int index = 0; index <= d; index += k){
+        answer += floor(sqrt(((long long) d * d) - ((long long) index * index))) / k + 1;
+    }
+    
+    return answer;
+}
