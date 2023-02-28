@@ -1,0 +1,45 @@
+#include <string>
+#include <vector>
+#include <stack>
+#include <iostream>
+
+using namespace std;
+
+int solution(vector<int> order) {
+    int answer = 0;
+    
+    stack<int> ReverseQ;
+        
+    int nIdx = 0;
+    for(int Box = 1; Box <= order.size(); Box++){
+        if(Box == order[nIdx]){
+            answer++;
+            nIdx++;
+        }else{
+            while(!ReverseQ.empty()){
+                if(ReverseQ.top() == order[nIdx]){
+                    ReverseQ.pop();
+                    nIdx++;
+                    answer++;
+                }else{
+                    break;
+                }   
+            }
+            
+            ReverseQ.push(Box);
+        }
+    }
+    
+    while(!ReverseQ.empty()){
+        if(ReverseQ.top() == order[nIdx]){
+            answer++;
+            nIdx++;
+            ReverseQ.pop();
+        }
+        else{
+            break;
+        }
+    }
+    
+    return answer;
+}
