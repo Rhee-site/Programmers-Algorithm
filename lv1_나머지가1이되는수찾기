@@ -1,0 +1,15 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int n) {
+    int answer = 0;
+    
+    for(int index = 2; index < n; index++){
+        if(n % index == 1)
+            return index;
+    }
+    
+    return answer;
+}
