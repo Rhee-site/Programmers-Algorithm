@@ -1,0 +1,26 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+static int nStandard = 0;
+
+bool Compare(const string strSrc, const string strDst){
+    if(strSrc[nStandard] == strDst[nStandard]){
+        return strSrc < strDst;
+    }
+    else{
+        return strSrc[nStandard] < strDst[nStandard];
+    }
+}
+
+vector<string> solution(vector<string> strings, int n) {
+    vector<string> answer;
+    
+    nStandard = n;
+    sort(strings.begin(), strings.end(), Compare);
+    answer.assign(strings.begin(), strings.end());
+    
+    return answer;
+}
