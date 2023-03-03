@@ -1,0 +1,51 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <iostream>
+using namespace std;
+
+int solution(string s) {
+    int answer = 0;
+    
+    map<string, string> mp;
+    mp.insert({"zero", "0"});
+    mp.insert({"one", "1"});
+    mp.insert({"two", "2"});
+    mp.insert({"three", "3"});
+    mp.insert({"four", "4"});
+    mp.insert({"five", "5"});
+    mp.insert({"six", "6"});
+    mp.insert({"seven", "7"});
+    mp.insert({"eight", "8"});
+    mp.insert({"nine", "9"});
+    
+    string strResult = "";
+    string strTempResult = "";
+        
+    for(int index = 0; index < s.size(); index++){
+        string strTemp;
+        strTemp = s[index];
+        if(strTemp >= "0" && strTemp <= "9"){
+            if(!strTempResult.empty()){
+                auto item = mp.find(strTempResult);
+                if(item != mp.end()){
+                    strResult += item->second;   
+                    strTempResult.clear();
+                }
+            }
+            strResult += strTemp;
+        }
+        else{
+            strTempResult += strTemp;
+            auto item = mp.find(strTempResult);
+            if(item != mp.end()){
+                strResult += item->second;   
+                strTempResult.clear();
+            }
+        }
+    }
+    
+    answer = stoi(strResult);
+    
+    return answer;
+}
