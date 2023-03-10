@@ -1,0 +1,50 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int gcd(int Src, int Dst){
+    while(Dst != 0){
+        int nRet = Src % Dst;
+        Src = Dst;
+        Dst = nRet;
+    }
+    return Src;
+}
+
+int gcd(vector<int> Arr){
+    int nResult = Arr.front();
+    for(int index = 1; index < Arr.size(); index++)
+        nResult = gcd(nResult, Arr[index]);
+    return nResult;
+}
+
+bool CheckCondition(vector<int> Arr, int nSrc){
+    bool bResult = false;
+    for(int index = 0; index < Arr.size(); index++)
+        if(Arr[index] % nSrc == 0)
+            bResult = true;
+    return bResult;
+}
+
+int solution(vector<int> arrayA, vector<int> arrayB) {
+    int answer = 0;
+    
+    int nAgcd = gcd(arrayA);
+    int nBgcd = gcd(arrayB);
+    
+    bool bConditionA = CheckCondition(arrayB, nAgcd);
+    bool bConditionB = CheckCondition(arrayA, nBgcd);
+            
+    if(bConditionA == false && bConditionB == false)
+        answer = max(nAgcd, nBgcd);
+    else if(bConditionA == false && bConditionB == true)
+        answer = nAgcd;
+    else if(bConditionA == true && bConditionB == false)
+        answer = nBgcd;
+    
+    if(answer == 1)
+            return 0;
+    
+    return answer;
+}
