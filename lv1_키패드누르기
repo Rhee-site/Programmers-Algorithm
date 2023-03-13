@@ -1,0 +1,88 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <iostream>
+using namespace std;
+
+typedef struct{
+    int x;
+    int y;
+}LocationInfo;
+
+string solution(vector<int> numbers, string hand) {
+    string answer = "";
+    
+    map<int, pair<int, int>> mp;
+    mp.insert({0, {1, 0}});
+    mp.insert({1, {0, 3}});
+    mp.insert({2, {1, 3}});
+    mp.insert({3, {2, 3}});
+    mp.insert({4, {0, 2}});
+    mp.insert({5, {1, 2}});
+    mp.insert({6, {2, 2}});
+    mp.insert({7, {0, 1}});
+    mp.insert({8, {1, 1}});
+    mp.insert({9, {2, 1}});
+    
+    LocationInfo Left;
+    Left.x = 0;
+    Left.y = 0;
+    
+    LocationInfo Right;
+    Right.x = 2;
+    Right.y = 0;
+    
+    for(int index = 0; index < numbers.size(); index++){
+        int nLeftCost = 0;
+        int nRightCost = 0;
+        
+        int nTargetX = mp.find(numbers[index])->second.first;
+        int nTargetY = mp.find(numbers[index])->second.second;
+        
+        if(numbers[index] == 1 || numbers[index] == 4 || numbers[index] == 7){
+            Left.x = nTargetX;
+            Left.y = nTargetY;
+            answer += "L";
+        }
+        else if(numbers[index] == 3 || numbers[index] == 6 || numbers[index] == 9){
+            Right.x = nTargetX;
+            Right.y = nTargetY;
+            answer += "R";
+        }
+        else {
+            nLeftCost = abs(Left.x - nTargetX) + abs(Left.y - nTargetY);
+            nRightCost = abs(Right.x - nTargetX) + abs(Right.y - nTargetY);
+            
+            if(nLeftCost > nRightCost){
+                Right.x = nTargetX;
+                Right.y = nTargetY;
+                answer += "R";
+            }
+            else if(nLeftCost < nRightCost){
+                Left.x = nTargetX;
+                Left.y = nTargetY;
+                answer += "L";
+            }
+            else if(nLeftCost == nRightCost){
+                if(hand == "right"){
+                    Right.x = nTargetX;
+                    Right.y = nTargetY;
+                    answer += "R";
+                }
+                else if(hand == "left"){
+                    Left.x = nTargetX;
+                    Left.y = nTargetY;
+                    answer += "L";
+                }
+                else{
+                    cout << "???" << endl;
+                }
+            }
+            else{
+                cout << "Error" << endl;
+            }
+        }
+    }
+    
+    return answer;
+}
