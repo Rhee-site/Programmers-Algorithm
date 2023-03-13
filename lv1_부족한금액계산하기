@@ -1,0 +1,17 @@
+using namespace std;
+
+long long solution(int price, int money, int count)
+{
+    long long answer = 0;
+    long long TotalPrice = 0;
+    
+    for(int index = 0; index <= count; index++)
+        TotalPrice += price * index;
+    
+    if(money - TotalPrice < 0)
+        answer = TotalPrice - money;
+    else
+        return 0;
+    
+    return answer;
+}
