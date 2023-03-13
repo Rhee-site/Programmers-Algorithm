@@ -1,0 +1,32 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int num) {
+    int answer = 0;
+    
+    if(num == 1)
+        return answer;
+    
+    long long nTemp = num;
+    
+    while(nTemp != 1){
+        if(answer == 500){
+            answer = -1;
+                break;   
+        }
+        
+        if(nTemp % 2 == 0){
+            nTemp /= 2;   
+        }
+        else{
+            nTemp *= 3;
+            nTemp += 1;
+        }
+        
+        answer++;
+    }
+    
+    return answer;
+}
