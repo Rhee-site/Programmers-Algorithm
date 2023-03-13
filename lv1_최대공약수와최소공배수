@@ -1,0 +1,28 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int gcd(int Src1, int Src2){
+    int Ret = 0;
+    while(Src2 != 0){
+        Ret = Src1 % Src2;
+        Src1 = Src2;
+        Src2 = Ret;
+    }
+    return Src1;
+}
+
+int lcm(int Src1, int Src2){
+    return Src1 * Src2 / gcd(Src1, Src2);
+}
+
+vector<int> solution(int n, int m) {
+    vector<int> answer;
+        
+    answer.push_back(gcd(n, m));
+    answer.push_back(lcm(n, m));
+    
+    return answer;
+}
