@@ -1,0 +1,32 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+
+string Convert10to3(int n){
+    string strResult = "";
+    
+    while(n > 0){
+        strResult += to_string(n % 3);
+        n /= 3;
+    }
+    
+    reverse(strResult.begin(), strResult.end());
+        
+    return strResult;
+}
+
+int solution(int n) {
+    int answer = 0;
+    
+    string strResult = Convert10to3(n);
+    for(int index = 0; index < strResult.size(); index++){
+        string strTemp = "";
+        strTemp = strResult[index];
+        answer += (pow(3, index) * stoi(strTemp));
+    }
+    
+    return answer;
+}
