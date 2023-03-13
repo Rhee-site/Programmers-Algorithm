@@ -1,0 +1,35 @@
+#include <string>
+#include <vector>
+#include <map>
+using namespace std;
+
+vector<int> solution(vector<int> lottos, vector<int> win_nums) {
+    vector<int> answer;
+    
+    map<int, int> mp;
+    mp.insert({6, 1});
+    mp.insert({5, 2});
+    mp.insert({4, 3});
+    mp.insert({3, 4});
+    mp.insert({2, 5});
+    mp.insert({1, 6});
+    mp.insert({0, 6});
+    
+    int nWinCount = 0;
+    for(int Src = 0; Src < lottos.size(); Src++){
+        for(int Dst = 0; Dst < win_nums.size(); Dst++){
+            if(lottos[Src] == win_nums[Dst])
+                nWinCount++;
+        }
+    }
+    
+    int nZeroCount = 0;
+    for(int index = 0; index < lottos.size(); index++)
+        if(lottos[index] == 0)
+            nZeroCount++;
+    
+    answer.push_back(mp.find(nWinCount + nZeroCount)->second);
+    answer.push_back(mp.find(nWinCount)->second);
+    
+    return answer;
+}
