@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+int solution(string dartResult) {
+    int answer = 0;
+    
+    vector<int> VecnNumber;
+    string strTemp = "";
+    
+    for(int index = 0; index < dartResult.size(); index++){
+        if(dartResult[index] >= '0' && dartResult[index] <= '9'){
+            strTemp += dartResult[index];
+        }
+        else{
+            if(!strTemp.empty()){
+                VecnNumber.push_back(stoi(strTemp));
+                strTemp = "";
+            }
+            
+            if(dartResult[index] == 'S'){
+                VecnNumber.back() = pow(VecnNumber.back(), 1);
+            }
+            else if(dartResult[index] == 'D'){
+                VecnNumber.back() = pow(VecnNumber.back(), 2);    
+            }
+            else if(dartResult[index] == 'T'){
+                VecnNumber.back() = pow(VecnNumber.back(), 3);
+            }
+            else if(dartResult[index] == '*'){
+                if(VecnNumber.size() == 1){
+                    VecnNumber[VecnNumber.size() - 1] *= 2;
+                }
+                else if(VecnNumber.size() > 1){
+                    VecnNumber[VecnNumber.size() - 1] *= 2;
+                    VecnNumber[VecnNumber.size() - 2] *= 2;
+                }
+            }
+            else if(dartResult[index] == '#'){
+                VecnNumber.back() *= -1;
+            }
+        }
+    }
+    
+    for(int index = 0; index < VecnNumber.size(); index++){
+        answer += VecnNumber[index];
+    }
+    
+    return answer;
+}
