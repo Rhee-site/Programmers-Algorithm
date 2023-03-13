@@ -1,0 +1,15 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(vector<int> a, vector<int> b) {
+    int answer = 0;
+    
+    int nTotalCount = a.size();
+    for(int index = 0; index < nTotalCount; index++){
+        answer += a[index] * b[index];
+    }
+    
+    return answer;
+}
