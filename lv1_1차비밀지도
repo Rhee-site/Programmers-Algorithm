@@ -1,0 +1,50 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+string Convert10to2(int Src, int n){
+    string strResult = "";
+    while(Src != 0){
+        strResult += to_string(Src % 2);
+        Src /= 2;
+    }
+    
+    while(strResult.size() != n)
+        strResult += "0";
+    
+    reverse(strResult.begin(), strResult.end());
+    
+    return strResult;
+}
+
+vector<string> solution(int n, vector<int> arr1, vector<int> arr2) {
+    vector<string> answer;
+    
+    for(int nRow = 0; nRow < n; nRow++){
+        string strTemp = "";
+        for(int nCol = 0; nCol < n; nCol++)
+            strTemp += " ";
+        answer.push_back(strTemp);
+    }
+    
+    for(int index = 0; index < arr1.size(); index++){
+        string strTemp = Convert10to2(arr1[index], n);
+        for(int i = 0; i < n; i++){
+            if(strTemp[i] == '1')
+                answer[index][i] = '#';
+        }
+    }
+    
+    for(int index = 0; index < arr2.size(); index++){
+        string strTemp = Convert10to2(arr2[index], n);
+        for(int i = 0; i < n; i++){
+            if(strTemp[i] == '1')
+                answer[index][i] = '#';
+        }
+    }
+    
+    return answer;
+}
