@@ -1,0 +1,47 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(vector<vector<int>> sizes) {
+    int answer = 0;
+    
+    int nMaxTH = 0, nMinTH = 0;
+    
+    if(sizes.front()[0] >= sizes.front()[1]){
+        nMaxTH = sizes.front()[0];
+        nMinTH = sizes.front()[1];
+    }
+    else{
+        nMaxTH = sizes.front()[1];
+        nMinTH = sizes.front()[0];
+    }
+    sizes.erase(sizes.begin());
+    
+    while(sizes.size()){
+        int nMax = 0, nMin = 0;
+    
+        if(sizes.front()[0] >= sizes.front()[1]){
+            nMax = sizes.front()[0];
+            nMin = sizes.front()[1];
+        }
+        else{
+            nMax = sizes.front()[1];
+            nMin = sizes.front()[0];
+        }
+        
+        if(nMaxTH < nMax)
+            nMaxTH = nMax;
+        
+        if(nMinTH < nMin)
+            nMinTH = nMin;
+        
+        sizes.erase(sizes.begin());
+    }
+    
+    answer = nMaxTH * nMinTH;
+    cout << nMaxTH << " " << nMinTH << endl;
+    
+    return answer;
+}
