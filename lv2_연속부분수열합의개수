@@ -1,0 +1,43 @@
+#include <string>
+#include <vector>
+#include <set>
+
+using namespace std;
+
+void Solve(vector<int> elements, int & answer, set<int> & Info, int nStartPos){
+    int nSum = elements[nStartPos];
+    
+    auto iter = Info.find(nSum);
+    if(iter == Info.end()){
+        if(Info.insert(nSum).second)
+            answer++;
+    }
+    
+    int index = nStartPos + 1;
+    if(index >= elements.size())
+        index = 0;
+    
+    while(index != nStartPos){
+        nSum += elements[index];
+        auto iter = Info.find(nSum);
+        if(iter == Info.end()){
+            if(Info.insert(nSum).second)
+                answer++;
+        }
+        
+        index++;
+        
+        if(index >= elements.size())
+            index = 0;
+    }
+}
+
+int solution(vector<int> elements) {
+    int answer = 0;
+    
+    set<int> Info;
+    for(int index = 0; index < elements.size(); index++)
+        Solve(elements, answer, Info, index);
+        
+    return answer;
+}
