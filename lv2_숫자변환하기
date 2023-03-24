@@ -1,0 +1,31 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int solution(int x, int y, int n) {
+    int answer = 0;
+    
+    vector<int> VecnDP(y + 1, 987654321);
+    VecnDP[x] = 0;
+    
+    for(int index = x; index <= y; index++){
+        if(VecnDP[index] == 1e9)
+            continue;
+        
+        if(index + n <= y)
+            VecnDP[index + n] = min(VecnDP[index + n], VecnDP[index] + 1);
+        if(index * 2 <= y)
+            VecnDP[index * 2] = min(VecnDP[index * 2], VecnDP[index] + 1);
+        if(index * 3 <= y)
+            VecnDP[index * 3] = min(VecnDP[index * 3], VecnDP[index] + 1);
+    }
+    
+    if(VecnDP[y] == 987654321)
+        answer = -1;
+    else
+        answer = VecnDP[y];
+    
+    return answer;
+}
