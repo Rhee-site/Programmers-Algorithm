@@ -1,0 +1,24 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+int solution(vector<int> number) {
+    int answer = 0;
+    
+    vector<bool> visited(number.size(), true);
+	for (int i = 0; i < number.size() - 3; i++) 
+        visited[i] = false;
+    
+    do{
+        int nSum = 0;
+        for(int index = 0; index < number.size(); index++)
+            if(visited[index])
+                nSum += number[index];
+        if(nSum == 0)
+            answer++;
+    }while(next_permutation(visited.begin(), visited.end()));
+    
+    return answer;
+}
